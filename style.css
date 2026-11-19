@@ -1,0 +1,86 @@
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;                 /* เต็มหน้าจอ ไม่มี scrollbar */
+  background: #163a2d url("2.png") center / cover no-repeat;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ---------- Stage 1920 x 1080 ----------
+   พื้นหลัง 2.png อยู่ใน stage เดียวกับตัวเลขและปุ่ม
+   จึงสเกลไปพร้อมกัน ตำแหน่งตรงกับกล่องในรูปเสมอ        */
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  background: url("2.png") center / 100% 100% no-repeat;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) scale(var(--scale, 1));
+}
+
+/* ---------- ตัวเลข ---------- */
+.num {
+  position: absolute;
+  left: calc(var(--cx) - 150px);    /* จัดกึ่งกลางกล่อง */
+  top: 382px;
+  width: 300px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  font-family: "Alfa Slab One", "Rockwell Extra Bold", "Rockwell", "Bookman Old Style", Georgia, serif;
+  font-weight: 900;
+  font-size: 64px;
+  color: #000;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+/* ---------- Toggle ---------- */
+.toggle {
+  --h: 70px;                        /* ความสูงราง = เส้นผ่านศูนย์กลางปุ่มกลม */
+  --pos: 0;                         /* 0 = ซ้าย, 1 = ขวา (ปรับด้วยการลาก) */
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  border: 0;
+  border-radius: 999px;
+  background: #c8d1d9;
+  cursor: pointer;
+  outline: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toggle .knob {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--h);
+  height: var(--h);
+  border-radius: 50%;
+  background: #ffca36;
+  border: 7px solid #ad1b45;
+  box-shadow: 14px 14px 0 rgba(173, 27, 69, .085);
+  transform: translateX(calc((var(--w) - var(--h)) * var(--pos)));
+  transition: transform .28s cubic-bezier(.4, 1.4, .5, 1);
+}
+
+/* ระหว่างลาก ไม่ต้องมี transition */
+.toggle.dragging .knob { transition: none; }
+
+/* สถานะเปิด */
+.toggle[aria-checked="true"] { background: #c8d1d9; }
+
+.toggle:focus-visible {
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, .85);
+}
+
+.toggle:hover .knob { filter: brightness(1.05); }
